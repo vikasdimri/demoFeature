@@ -32,7 +32,7 @@ public class MyStack {
 
 class MyStackImplementation {
     public static void main(String[] args) {
-        MyStack stack = new MyStack(10);
+        MyStack stack = new MyStack(4);
         stack.push(10);
         stack.push(20);
         stack.push(30);

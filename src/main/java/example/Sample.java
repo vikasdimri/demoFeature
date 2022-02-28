@@ -1,67 +1,69 @@
 package example;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class Sample
-{
+public class Sample {
+    // Define the character range
+    public static final int CHAR_RANGE = 128;
 
-    // Return the minimum number
-    // of swaps required to sort the array
-    public int minSwaps(int[] arr)
+    // Function to find the longest substring of a given string containing
+    // `k` distinct characters using a sliding window
+    public static String findLongestSubstring(String str, int k)
     {
-        int ans = 0;
-        int[] temp = Arrays.copyOfRange(arr, 0, arr.length);
-        Arrays.sort(temp);
-        Arrays.stream(temp).forEach(System.out::println);
-        System.out.println("---------");
-        for (int i = 0; i < arr.length; i++)
-        {
+        // base case
+        if (str == null || str.length() == 0) {
+            return str;
+        }
 
-            // This is checking whether
-            // the current element is
-            // at the right place or not
-            if (arr[i] != temp[i])
+        // stores the longest substring boundaries
+        int end = 0, begin = 0;
+
+        // set to store distinct characters in a window
+        Set<Character> window = new HashSet<>();
+
+        // Count array `freq` stores the frequency of characters present in the
+        // current window. We can also use a map instead of a count array.
+        int[] freq = new int[CHAR_RANGE];
+
+        // `[low…high]` maintains the sliding window boundaries
+        for (int low = 0, high = 0; high < str.length(); high++)
+        {
+            window.add(str.charAt(high));
+            freq[str.charAt(high)]++;
+
+            // if the window size is more than `k`, remove characters from the left
+            while (window.size() > k)
             {
-                ans++;
+                // If the leftmost character's frequency becomes 0 after
+                // removing it in the window, remove it from the set as well
+                int it = --freq[str.charAt(low)];
+                if (it == 0) {
+                    window.remove(str.charAt(low));
+                }
 
-                // Swap the current element
-                // with the right index
-                // so that arr[0] to arr[i] is sorted
-                swap(arr, i, indexOf(arr, temp[i]));
+                low++;        // reduce window size
+            }
+
+            // update the maximum window size if necessary
+            if (end - begin < high - low)
+            {
+                end = high;
+                begin = low;
             }
         }
-        return ans;
-    }
-    public void swap(int[] arr, int i, int j)
-    {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-    public int indexOf(int[] arr, int ele)
-    {
-        for (int i = 0; i < arr.length; i++)
-        {
-            if (arr[i] == ele) {
-                return i;
-            }
-        }
-        return -1;
-    }
-}
-// Driver class
-class Main
-{
 
-    // Driver program to test
-    // the above function
+        // return the longest substring found at `str[begin…end]`
+        return str.substring(begin, end + 1);
+    }
+
     public static void main(String[] args)
-            throws Exception
     {
-        //int[] a = {7, 1, 3, 2, 4, 5, 6 };
-        int[] a = {2, 3, 4, 1, 5};
-        // Output will be 5
-        System.out.println(new Sample().minSwaps(a));
+        String str = "abcbdbdbbdcdabd";
+        int k = 2;
+        System.out.println(findLongestSubstring(str, k));
+        System.out.println("bdbdbbd");
     }
 }
-// This code is contributed by Satvik Nema

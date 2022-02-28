@@ -1,9 +1,6 @@
 package example.algo.slidingwindow.example;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /*
 * Find the longest substring of a string containing `k` distinct characters
@@ -23,33 +20,33 @@ public class LongestSubstringOfStringContaining {
     public static final int CHAR_RANGE = 128;
 
     public static void main(String[] args) {
-        String str = "abdbdbabd";
+        String str = "abcbdbdbbdcdabd";
         int k = 2;
-        System.out.print(findLongestSubstring(str, k));
+        System.out.println(findLongestSubstring(str, k));
+        System.out.println("bdbdbbd");
+        //bdbdb
     }
 
     public static String findLongestSubstring(String str, int k) {
-        if (str == null || str.length() == 0) {
-            return str;
-        }
-        char[] chars = str.toCharArray();
-        Set<Character> window = new HashSet<>();
-        int begin = 0;
-        int end = 0;
-        Map<Character, Integer> windowCharCount = new HashMap<>();
-
-        for (int windowStart = 0, windowEnd = 0; windowEnd < chars.length; windowEnd++) {
-            window.add(chars[windowEnd]);
-            while (window.size() > k) {
-                window.remove(chars[windowStart]);
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        int maxLength = 0;
+        int start = 0, end = 0;
+        for (int windowStart = 0, windowEnd = 0; windowEnd < str.length(); windowEnd++) {
+            Character currentChar = str.charAt(windowEnd);
+            map.put(currentChar, map.getOrDefault(currentChar, 0) + 1);
+            while (map.size() > k) {
+                Character charFromFront = str.charAt(windowStart);
+                map.put(charFromFront, map.get(charFromFront) - 1);
+                if (map.get(charFromFront) == 0) {
+                    map.remove(charFromFront);
+                }
                 windowStart++;
             }
-            if (end - begin < windowEnd - windowStart) {
-                begin = windowStart;
+            if (end - start < windowEnd - windowStart) {
+                start = windowStart;
                 end = windowEnd;
             }
         }
-
-        return str.substring(begin, end + 1);
+        return str.substring(start, end + 1);
     }
 }

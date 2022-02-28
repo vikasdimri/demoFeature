@@ -1,27 +1,33 @@
 package example.algo.slidingwindow;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FlexibleSizeSlidingWindow {
     public static void main(String[] args) {
         int arr[] = {1, 4, 2, 10, 2, 3, 1, 0, 20};
-        maxSum(arr,15);
+        int[] ints = maxSum(arr, 15);
+        Arrays.stream(ints).forEach(System.out::println);
     }
 
-    private static void maxSum(int[] arr, int K) {
-        int n = arr.length;
-        int answer = 0;
-        int sum = 0;
-        int R = 1;
-        int L = 1;
-        for (L=1; L < n; L++) {
-            if (L > 1) {
-                sum = sum - arr[L - 1];
+    private static int[] maxSum(int[] arr, int totalSum) {
+        int maxSum = 0, windowSum = 0;
+        int start = 0, end = 0;
+        for (int windowStart = 0, windowEnd = 0; windowEnd < arr.length; windowEnd++) {
+            int currentElement = arr[windowEnd];
+            windowSum = windowSum + currentElement;
+            while (windowSum > totalSum) {
+                int windowElementFromStart = arr[windowStart];
+                windowSum = windowSum - windowElementFromStart;
+                windowStart++;
             }
-            while (R <= n && sum + arr[R] <= K) {
-                sum = sum + arr[R];
-                R = R + 1;
+            if (windowSum > maxSum) {
+                maxSum = windowSum;
+                start = windowStart;
+                end = windowEnd;
             }
-
         }
-        System.out.println(R + " " + L);
+        return Arrays.copyOfRange(arr, start, end+1);
     }
 }
