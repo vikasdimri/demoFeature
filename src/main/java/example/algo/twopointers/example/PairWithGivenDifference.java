@@ -1,10 +1,6 @@
 package example.algo.twopointers.example;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /*
 * Problem Description
@@ -55,29 +51,28 @@ Explanation 2:
 public class PairWithGivenDifference {
 
     public static void main(String[] args) {
-        //int[] arr = {-533, -666, -500, 169, 724, 478, 358, -38, -536, 705, -855, 281, -173, 961, -509, -5, 942, -173, 436, -609, -396, 902, -847, -708, -618, 421, -284, 718, 895, 447, 726, -229, 538, 869, 912, 667, -701, 35, 894, -297, 811, 322};
-        //int[] arr = {-533, -666, -500, 169, 724, 478, 358, -38, -536, 705, -855, 281, -173, 961, -509, -5, 942, -173, 436, -609, -396, 902, -847, -708, -618, 421, -284, 718, 895, 447, 726, -229, 538, 869, 912, 667, -701, 35, 894, -297, 811, 322};
-        //int[] arr = {-284, -229, -173, -38, 35, 169, 281, 358};
-        int[] arr = {107, -809, -993, 337, 457, -713, 753, -617, -55, -91, -791, 758, -779, -412, -578, -54, 506, 30, -587, 168, -100, -409, -238, 655, 410, -641, 624, -463, 548, -517, 595};
-        /*int a=169;
-        int b=-173;
-        System.out.println(a-b);
-        System.out.println(Math.abs(b-a));*/
-        System.out.println(solve(arr, 342));
+//        int[] arr = {-533, -666, -500, 169, 724, 478, 358, -38, -536, 705, -855, 281, -173, 961, -509, -5, 942, -173, 436, -609, -396, 902, -847, -708, -618, 421, -284, 718, 895, 447, 726, -229, 538, 869, 912, 667, -701, 35, 894, -297, 811, 322};
+//        System.out.println(solve(arr, 369));
+
+//        int[] arr = {-259, -825, 459, 825, 221, 870, 626, 934, 205, 783, 850, 398};
+//        System.out.println(solve(arr, -42));
+
+        int[] arr = {20, 500, 1000, 200};
+        System.out.println(solve(arr, 0));
 
     }
 
     public static int solve(int arr[], int target) {
         arr = Arrays.stream(arr).sorted().toArray();
         int start = 0, end = 1;
-        while (end < arr.length) {
-            int difference = Math.abs(arr[end] - arr[start]);
-            if (start != end && difference > target) {
-                end++;
-            } else if(difference<target){
-                start++;
-            }else{
+        while (start < arr.length && end < arr.length) {
+            if (start != end &&
+                    (arr[end] - arr[start] == target || arr[start] - arr[end] == target)) {
                 return 1;
+            } else if (arr[end] - arr[start] < target) {
+                end++;
+            } else {
+                start++;
             }
         }
         return 0;
