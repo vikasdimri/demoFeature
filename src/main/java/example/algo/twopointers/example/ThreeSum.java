@@ -44,6 +44,6 @@ public class ThreeSum {
                 }
             }
         }
-        return minimSum;
+        return (int)minimSum;
     }
 }
