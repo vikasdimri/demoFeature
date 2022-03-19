@@ -26,15 +26,18 @@ public class CountingTriangles {
     }
 
     public static int nTriang(int[] arr) {
-        System.out.println("nTriang");
-        int count = 0;
+        if (arr.length < 3) {
+            return 0;
+        }
+        long count = 0;
         arr = Arrays.stream(arr).sorted().toArray();
-        for (int i = arr.length - 1; i >= 1; i--) {
-            int ptr1 = 0, ptr2 = i - 1;
+        for (long i = arr.length - 1; i >= 1; i--) {
+            long ptr1 = 0, ptr2 = i - 1;
             while (ptr1 < ptr2) {
-                int ab = arr[ptr1], bc = arr[ptr2], ca = arr[i];
+                long ab = (long) arr[(int) ptr1];
+                long bc = (long) arr[(int) ptr2];
+                long ca = (long) arr[(int) i];
                 if (ab + bc > ca) {
-                    System.out.println("[" + ab + ", " + bc + ", " + ca + "]");
                     count = count + (ptr2 - ptr1);
                     ptr2--;
                 } else {
@@ -42,6 +45,6 @@ public class CountingTriangles {
                 }
             }
         }
-        return count;
+        return (int) count;
     }
 }
